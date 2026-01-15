@@ -2,8 +2,10 @@
 
 namespace App\Tests;
 
+use App\Domain\Activity\ActivityIds;
 use App\Domain\Activity\ActivityIntensity;
 use App\Domain\Activity\ActivityTotals;
+use App\Domain\Activity\DbalActivityIdRepository;
 use App\Domain\Activity\DbalActivityRepository;
 use App\Domain\Activity\Eddington\Eddington;
 use App\Domain\Activity\Stream\StreamBasedActivityHeartRateRepository;
@@ -37,6 +39,7 @@ abstract class ContainerTestCase extends KernelTestCase
 
         // Empty the static cache between tests.
         DbalActivityRepository::$cachedActivities = [];
+        DbalActivityIdRepository::$cachedActivityIds = ActivityIds::empty();
         ActivityIntensity::$cachedIntensities = [];
         StreamBasedActivityPowerRepository::$cachedPowerOutputs = [];
         StreamBasedActivityPowerRepository::$cachedNormalizedPowers = [];
