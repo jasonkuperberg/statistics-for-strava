@@ -2,8 +2,9 @@
 
 namespace App\Tests\Domain\Activity;
 
+use App\Domain\Activity\ActivitiesEnricher;
+use App\Domain\Activity\ActivityIdRepository;
 use App\Domain\Activity\ActivityIntensity;
-use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
 use App\Domain\Activity\ActivityWithRawDataRepository;
 use App\Domain\Athlete\Athlete;
@@ -102,7 +103,8 @@ class ActivityIntensityTest extends ContainerTestCase
         );
 
         $this->activityIntensity = new ActivityIntensity(
-            $this->getContainer()->get(ActivityRepository::class),
+            $this->getContainer()->get(ActivityIdRepository::class),
+            $this->getContainer()->get(ActivitiesEnricher::class),
             $this->athleteRepository,
             $this->ftpHistory
         );

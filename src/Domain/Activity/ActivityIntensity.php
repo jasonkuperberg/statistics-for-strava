@@ -17,7 +17,8 @@ final class ActivityIntensity
     public static array $cachedIntensities = [];
 
     public function __construct(
-        private readonly ActivityRepository $activityRepository,
+        private readonly ActivityIdRepository $activityIdRepository,
+        private readonly ActivitiesEnricher $activitiesEnricher,
         private readonly AthleteRepository $athleteRepository,
         private readonly FtpHistory $ftpHistory,
     ) {
@@ -30,14 +31,14 @@ final class ActivityIntensity
             return self::$cachedIntensities[$cacheKey];
         }
 
-        $activities = $this->activityRepository->findByStartDate(
+        $activityIds = $this->activityIdRepository->findByStartDate(
             startDate: $on,
             activityType: null
         );
         self::$cachedIntensities[$cacheKey] = 0;
 
-        /** @var Activity $activity */
-        foreach ($activities as $activity) {
+        foreach ($activityIds as $activityId) {
+            $activity = $this->activitiesEnricher->getEnrichedActivity($activityId);
             if (!$intensity = $this->calculateForActivity($activity)) {
                 continue;
             }
